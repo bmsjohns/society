@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/colors.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/typography.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/radius.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/elevation.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/motion.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/tokens/base.css">
+<link rel="stylesheet" href="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/styles.css">
+<script src="_ds/prologue-design-system-f7bff348-6e33-4e74-a3f1-c1a0e681072b/_ds_bundle.js"></script>
+<style>body{margin:0;background:#E8E5DE}a{color:#AD3B28}a:hover{color:#C0432E}</style>
+</helmet>
+
+<div style="padding:80px;display:flex;flex-direction:column;gap:120px;font-family:var(--font-sans);color:var(--ink);background:#E8E5DE;min-width:max-content">
+
+<div style="display:flex;align-items:flex-end;gap:32px">
+  <img src="assets/prologue-red.svg" alt="Prologue" style="height:44px">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-70)">Prologue Society · Member scan app · v1 screens</div>
+    <div style="font-size:15px;color:var(--ink-70)">Staff screens are calm and functional. Customer-facing screens carry the brand. Placeholder copy and invented members throughout.</div>
+  </div>
+</div>
+
+<!-- STAFF: SCAN -->
+<section data-screen-label="Staff scan" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Scan</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:62ch">The camera fills the screen and reads continuously. Station is set once per device. A good read locks the frame green, buzzes and chimes, then opens the member.</div>
+  </div>
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+    <sc-for list="{{ scanPhones }}" as="p" hint-placeholder-count="2">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">{{ p.label }}</div>
+        <div data-screen-label="{{ p.label }}" style="width:390px;height:844px;border-radius:36px;overflow:hidden;background:var(--red-700);color:var(--paper);display:flex;flex-direction:column">
+          <div style="padding:22px 24px 14px;display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;align-items:center;gap:14px"><img src="assets/prologue-white.svg" alt="Prologue" style="height:20px"><span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border:1px solid rgba(245,243,239,.24);border-radius:999px;padding:8px 14px">{{ station }}</span></div>
+            <span style="font-size:15px;color:var(--paper-70)">Jo · Switch</span>
+          </div>
+          <div style="flex:1;margin:0 16px;border-radius:20px;background:#262622;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;top:18px;left:0;right:0;text-align:center;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-45)">Live camera</div>
+            <div style="width:250px;height:250px;position:relative;background:{{ p.frameFill }}">
+              <div style="position:absolute;top:0;left:0;width:44px;height:44px;border-top:4px solid {{ p.bracket }};border-left:4px solid {{ p.bracket }};border-top-left-radius:14px"></div>
+              <div style="position:absolute;top:0;right:0;width:44px;height:44px;border-top:4px solid {{ p.bracket }};border-right:4px solid {{ p.bracket }};border-top-right-radius:14px"></div>
+              <div style="position:absolute;bottom:0;left:0;width:44px;height:44px;border-bottom:4px solid {{ p.bracket }};border-left:4px solid {{ p.bracket }};border-bottom-left-radius:14px"></div>
+              <div style="position:absolute;bottom:0;right:0;width:44px;height:44px;border-bottom:4px solid {{ p.bracket }};border-right:4px solid {{ p.bracket }};border-bottom-right-radius:14px"></div>
+              <sc-if value="{{ p.read }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+                  <div style="width:84px;height:84px;border-radius:999px;background:#2E6A48;color:var(--paper);display:flex;align-items:center;justify-content:center"><span style="display:block;width:44px;height:44px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.408.0/icons/check.svg) center/contain no-repeat"></span></div>
+                </div>
+              </sc-if>
+            </div>
+            <div style="position:absolute;bottom:24px;left:24px;right:24px;text-align:center;font-size:19px;font-weight:600;color:{{ p.captionColor }}">{{ p.caption }}</div>
+          </div>
+          <div style="padding:16px 16px 28px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" tone="onRed" size="lg" full="{{ true }}" hint-size="100%,56px">Look up member</x-import>
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" tone="onRed" size="lg" full="{{ true }}" hint-size="100%,56px">Recent scans</x-import>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">01c · Scan · tablet landscape</div>
+      <div data-screen-label="Scan tablet" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;background:var(--red-700);color:var(--paper);display:grid;grid-template-columns:minmax(0,1fr) 380px">
+        <div style="margin:20px 0 20px 20px;border-radius:20px;background:#262622;position:relative;display:flex;align-items:center;justify-content:center">
+          <div style="position:absolute;top:18px;left:0;right:0;text-align:center;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-45)">Live camera</div>
+          <div style="width:320px;height:320px;position:relative">
+            <div style="position:absolute;top:0;left:0;width:56px;height:56px;border-top:4px solid var(--paper);border-left:4px solid var(--paper);border-top-left-radius:16px"></div>
+            <div style="position:absolute;top:0;right:0;width:56px;height:56px;border-top:4px solid var(--paper);border-right:4px solid var(--paper);border-top-right-radius:16px"></div>
+            <div style="position:absolute;bottom:0;left:0;width:56px;height:56px;border-bottom:4px solid var(--paper);border-left:4px solid var(--paper);border-bottom-left-radius:16px"></div>
+            <div style="position:absolute;bottom:0;right:0;width:56px;height:56px;border-bottom:4px solid var(--paper);border-right:4px solid var(--paper);border-bottom-right-radius:16px"></div>
+          </div>
+          <div style="position:absolute;bottom:28px;left:0;right:0;text-align:center;font-size:20px;font-weight:600;color:var(--paper-70)">Point at a Society card or wallet pass</div>
+        </div>
+        <div style="padding:32px 28px;display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;align-items:center;gap:14px"><img src="assets/prologue-white.svg" alt="Prologue" style="height:20px"><span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border:1px solid rgba(245,243,239,.24);border-radius:999px;padding:8px 14px">{{ station }}</span></div>
+            <span style="font-size:15px;color:var(--paper-70)">Jo · Switch</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" tone="onRed" size="lg" full="{{ true }}" hint-size="100%,56px">Look up member</x-import>
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" tone="onRed" size="lg" full="{{ true }}" hint-size="100%,56px">Recent scans</x-import>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <div style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-70);padding-bottom:10px">Last scans</div>
+            <sc-for list="{{ recentShort }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(245,243,239,.24)">
+                <span style="width:12px;height:12px;border-radius:999px;background:{{ r.st.dot }};flex:none"></span>
+                <div style="flex:1;min-width:0"><div style="font-size:17px;font-weight:600">{{ r.name }}</div><div style="font-size:14px;color:var(--paper-70)">{{ r.st.label }}</div></div>
+                <span style="font-size:15px;color:var(--paper-70)">{{ r.time }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAFF: MEMBER STATES -->
+<section data-screen-label="Member screen" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Member</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:66ch">Status first, at arm's length. Each band pairs a colour with an icon, a word and an instruction, so nothing depends on colour alone. Status colours sit outside the brand reds: Lapsed is ink, never red.</div>
+  </div>
+  <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
+    <sc-for list="{{ memberStates }}" as="m" hint-placeholder-count="5">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">{{ m.label }}</div>
+        <div data-screen-label="{{ m.label }}" style="width:390px;height:844px;border-radius:36px;overflow:hidden;background:var(--paper);border:1px solid var(--ink-12);display:flex;flex-direction:column">
+          <div style="background:{{ m.st.bg }};color:{{ m.st.fg }};padding:20px 24px 26px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">{{ station }}</span>
+              <span style="font-size:14px;opacity:.85">Back to scan in 20s</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px">
+              <span style="display:block;width:44px;height:44px;flex:none;background:currentColor;mask:url({{ m.st.icon }}) center/contain no-repeat"></span>
+              <span style="font-size:40px;font-weight:600;line-height:1">{{ m.st.label }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="font-size:17px;font-weight:600">{{ m.sub }}</div>
+              <div style="font-size:17px">{{ m.action }}</div>
+            </div>
+          </div>
+
+          <sc-if value="{{ m.member }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:24px 24px 0;display:flex;gap:16px;align-items:center">
+              <sc-if value="{{ showPhotos }}" hint-placeholder-val="{{ true }}">
+                <div style="width:72px;height:72px;border-radius:999px;background:var(--pink-100);color:var(--red-700);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:28px;flex:none;opacity:{{ m.dim }}">{{ m.member.initials }}</div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                <div style="font-family:var(--font-display);font-size:38px;line-height:1.05;letter-spacing:-.01em">{{ m.member.name }}</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Badge" variant="neutral" hint-size="auto,26px">{{ m.member.tier }}</x-import>
+                  <sc-if value="{{ m.member.founding }}"><x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Badge" variant="red" hint-size="auto,26px">Founding Member</x-import></sc-if>
+                  <sc-if value="{{ m.member.birthday }}"><x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Badge" variant="blush" hint-size="auto,26px">Birthday month</x-import></sc-if>
+                </div>
+              </div>
+            </div>
+            <div style="padding:14px 24px 0;font-size:15px;color:var(--ink-70)">{{ m.member.renewLine }}</div>
+
+            <div style="margin:20px 16px 0;background:var(--white);border:1px solid var(--ink-12);border-radius:20px;padding:4px 18px 8px">
+              <div style="font-family:var(--font-display);font-size:28px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700);padding:14px 0 10px">Today</div>
+              <sc-for list="{{ m.benefits }}" as="b" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--ink-12)">
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:18px;font-weight:600;color:{{ b.nameColor }}">{{ b.name }}</div>
+                    <div style="font-size:15px;color:var(--ink-70);margin-top:2px">{{ b.detail }}</div>
+                  </div>
+                  <sc-if value="{{ b.canMark }}"><x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" size="md" hint-size="140px,48px">Mark as used</x-import></sc-if>
+                  <sc-if value="{{ b.used }}"><x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" size="md" disabled="{{ true }}" hint-size="90px,48px">Used</x-import></sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ m.notice }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:12px;align-items:flex-start;padding:16px 0 10px;border-top:1px solid var(--ink-12)">
+                  <span style="display:block;width:22px;height:22px;flex:none;margin-top:2px;background:var(--ink);mask:url({{ m.noticeIcon }}) center/contain no-repeat"></span>
+                  <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:18px;font-weight:600">{{ m.notice }}</div><div style="font-size:15px;color:var(--ink-70)">{{ m.noticeSub }}</div></div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ m.isUnknown }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:48px 28px 0;display:flex;flex-direction:column;gap:16px">
+              <div style="font-family:var(--font-display);font-size:34px;line-height:1.1;letter-spacing:-.01em">We couldn't match this code</div>
+              <div style="font-size:17px;line-height:1.5;color:var(--ink-70)">It may be an old or replaced card. Find them by name instead, or scan again.</div>
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+                <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" size="lg" full="{{ true }}" hint-size="100%,56px">Look up member</x-import>
+                <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" size="lg" full="{{ true }}" hint-size="100%,56px">Scan again</x-import>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="margin-top:auto;padding:18px 24px 26px;display:flex;flex-direction:column;gap:12px;align-items:center">
+            <div style="width:100%;height:3px;border-radius:999px;background:var(--ink-12);overflow:hidden"><div style="width:65%;height:100%;background:var(--red-700)"></div></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:15px;color:var(--ink-70)"><img src="assets/p-mark-red.svg" alt="" style="height:18px">Tap anywhere to scan the next member</div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- STAFF: MARK AS USED -->
+<section data-screen-label="Mark as used" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Mark as used</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:62ch">One confirm tap, then the button locks so a second tap can't log twice. Success returns to the member with the row now showing when and where.</div>
+  </div>
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">03a · Confirm</div>
+      <div data-screen-label="Confirm" style="width:390px;height:844px;border-radius:36px;overflow:hidden;background:var(--paper);border:1px solid var(--ink-12);position:relative">
+        <div style="background:#2E6A48;color:var(--paper);padding:20px 24px 26px;display:flex;flex-direction:column;gap:14px">
+          <span style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">{{ station }}</span>
+          <div style="display:flex;align-items:center;gap:14px"><span style="display:block;width:44px;height:44px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.408.0/icons/circle-check.svg) center/contain no-repeat"></span><span style="font-size:40px;font-weight:600;line-height:1">Active</span></div>
+        </div>
+        <div style="padding:24px;font-family:var(--font-display);font-size:38px;line-height:1.05">Sarah Okafor</div>
+        <div style="position:absolute;inset:0;background:rgba(38,38,34,.55)"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:28px 28px 0 0;padding:28px 24px 32px;display:flex;flex-direction:column;gap:14px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-70)">Mark as used</div>
+          <div style="font-family:var(--font-display);font-size:34px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700)">November's drink for Sarah?</div>
+          <div style="font-size:17px;color:var(--ink-70)">Monthly drink · {{ station }} · logged as Jo</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" size="lg" full="{{ true }}" hint-size="100%,56px">Confirm</x-import>
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" size="lg" full="{{ true }}" hint-size="100%,56px">Cancel</x-import>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">03b · Success</div>
+      <div data-screen-label="Success" style="width:390px;height:844px;border-radius:36px;overflow:hidden;background:var(--paper);border:1px solid var(--ink-12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:0 32px;text-align:center;box-sizing:border-box">
+        <div style="width:112px;height:112px;border-radius:999px;background:#2E6A48;color:var(--paper);display:flex;align-items:center;justify-content:center"><span style="display:block;width:60px;height:60px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.408.0/icons/check.svg) center/contain no-repeat"></span></div>
+        <img src="assets/pigeon-coffee-line.png" alt="" style="width:120px;margin-bottom:-8px"><div style="font-family:var(--font-display);font-size:40px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700)">Marked as used</div>
+        <div style="font-size:19px;font-weight:600">Monthly drink · Sarah Okafor</div>
+        <div style="font-size:17px;color:var(--ink-70)">Today, 7:42pm · {{ station }} · Jo</div>
+        <div style="font-size:15px;color:var(--ink-70);margin-top:8px">A manager can undo this within 24 hours.</div>
+        <div style="margin-top:24px;width:100%"><x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" size="lg" full="{{ true }}" hint-size="100%,56px">Back to Sarah</x-import></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAFF: CONCIERGE -->
+<section data-screen-label="Concierge staff view" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Concierge desk</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:62ch">The full picture for greeting and serving, facing away from the queue. No contact or payment details, ever.</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">05 · Staff concierge view · tablet landscape</div>
+    <div data-screen-label="Concierge staff" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;background:var(--paper);border:1px solid var(--ink-12);display:flex;flex-direction:column">
+      <div style="background:#2E6A48;color:var(--paper);padding:16px 28px;display:flex;align-items:center;gap:16px">
+        <span style="display:block;width:30px;height:30px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.408.0/icons/circle-check.svg) center/contain no-repeat"></span>
+        <span style="font-size:26px;font-weight:600">Active</span>
+        <span style="font-size:17px">Paid and in date · renews 21 Jun 2027</span>
+        <span style="margin-left:auto;font-size:15px;opacity:.85">Member screen: showing "Welcome back, Priya"</span>
+      </div>
+      <div style="padding:14px 24px;display:flex;align-items:center;gap:18px;border-bottom:1px solid var(--ink-12)">
+        <sc-if value="{{ showPhotos }}" hint-placeholder-val="{{ true }}"><div style="width:68px;height:68px;border-radius:999px;background:var(--pink-100);color:var(--red-700);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:26px">PS</div></sc-if>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:var(--font-display);font-size:44px;line-height:1.05;letter-spacing:-.01em;color:var(--red-700)">Priya Shah</div>
+          <div style="display:flex;gap:8px">
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Badge" variant="neutral" hint-size="auto,26px">Patron</x-import>
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Badge" variant="blush" hint-size="auto,26px">Birthday month</x-import>
+          </div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
+          <img src="assets/prologue-red.svg" alt="Prologue" style="height:22px;margin-right:8px"><x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Eyebrow" hint-size="auto,30px">Concierge · Jo</x-import>
+          <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" variant="secondary" size="lg" hint-size="150px,56px">Scan next</x-import>
+        </div>
+      </div>
+      <div style="flex:1;min-height:0;padding:16px 24px 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);gap:16px">
+        <div style="display:flex;flex-direction:column;gap:16px;min-height:0">
+          <div style="background:var(--pink-100);border-radius:20px;padding:4px 18px 6px">
+            <div style="font-family:var(--font-display);font-size:24px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700);padding:12px 0 8px">Today</div>
+            <sc-for list="{{ conciergeToday }}" as="b" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:12px;padding:7px 0;border-top:1px solid var(--ink-12)">
+                <div style="flex:1;min-width:0"><div style="font-size:17px;font-weight:600">{{ b.name }}</div><div style="font-size:14px;color:var(--ink-70);margin-top:2px">{{ b.detail }}</div></div>
+                <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" size="sm" hint-size="120px,40px">Mark as used</x-import>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--ink-12);border-radius:20px;padding:4px 18px 10px;flex:1;min-height:0;overflow:hidden">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 6px"><div style="font-family:var(--font-display);font-size:24px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700)">Benefits</div><span style="font-size:13px;color:var(--ink-70)">This membership year</span></div>
+            <sc-for list="{{ conciergeBenefits }}" as="b" hint-placeholder-count="4">
+              <div style="padding:4px 0;border-top:1px solid var(--ink-12);display:flex;flex-direction:column;gap:1px">
+                <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:15px;font-weight:600">{{ b.name }}</span><span style="font-size:14px;color:var(--ink-70)">{{ b.count }}</span></div>
+                <div style="font-size:13px;color:var(--ink-70)">{{ b.log }}</div>
+              </div>
+            </sc-for>
+            
+          </div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--ink-12);border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;gap:14px;min-height:0;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-family:var(--font-display);font-size:36px;line-height:1.08;letter-spacing:-.01em;color:var(--red-700)">Notes</span>
+            <span style="font-size:14px;color:var(--ink-70);white-space:nowrap">Newest first</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="flex:1;height:52px;border:1px solid var(--ink-20);border-radius:6px;background:var(--paper);display:flex;align-items:center;padding:0 16px;font-size:17px;color:var(--ink-45)">Add a note for Priya…</div>
+            <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Button" size="md" hint-size="120px,52px">Add note</x-import>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ conciergeNotes }}" as="n" hint-placeholder-count="4">
+              <div style="padding:16px 0;border-top:1px solid var(--ink-12);display:flex;flex-direction:column;gap:6px">
+                <div style="font-size:19px;line-height:1.45;text-wrap:pretty">{{ n.text }}</div>
+                <div style="font-size:14px;color:var(--ink-70)">{{ n.by }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;min-height:0">
+          <div style="background:var(--white);border:1px solid var(--ink-12);border-radius:20px;padding:4px 18px 10px">
+            <div style="font-family:var(--font-display);font-size:24px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700);padding:12px 0 6px">What we know</div>
+            <sc-for list="{{ conciergeKnow }}" as="k" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;padding:5px 0;font-size:14px"><span style="color:var(--ink-70)">{{ k.k }}</span><span>{{ k.v }}</span></div>
+            </sc-for>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--ink-12);border-radius:20px;padding:4px 18px 10px;flex:1;min-height:0;overflow:hidden">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 0 4px"><span style="font-family:var(--font-display);font-size:24px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700)">Visits</span><span style="font-size:13px;color:var(--ink-70)">{{ visitsSummary }}</span></div>
+            <sc-for list="{{ conciergeVisits }}" as="v" hint-placeholder-count="7">
+              <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--ink-12);font-size:14px">
+                <span style="width:8px;height:8px;border-radius:999px;flex:none;background:{{ v.dot }}"></span>
+                <span style="flex:1;font-weight:{{ v.weight }}">{{ v.when }}</span>
+                <span style="color:var(--ink-70)">{{ v.where }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAFF: LOOKUP + RECENT -->
+<section data-screen-label="Lookup and recent" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Look up &amp; recent</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:62ch">For members without a pass, and for reopening someone you just served. Results show name, tier and status only.</div>
+  </div>
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">06a · Look up · phone</div>
+      <div data-screen-label="Lookup phone" style="width:390px;height:844px;border-radius:36px;overflow:hidden;background:var(--paper);border:1px solid var(--ink-12);display:flex;flex-direction:column">
+        <div style="padding:22px 20px 12px;display:flex;align-items:center;gap:10px">
+          <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--red-700)"><span style="display:block;width:24px;height:24px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.408.0/icons/arrow-left.svg) center/contain no-repeat"></span></span>
+          <span style="font-family:var(--font-display);font-size:30px;letter-spacing:-.01em;color:var(--red-700)">Look up</span>
+        </div>
+        <div style="padding:0 16px 16px">
+          <div style="height:56px;border:1px solid var(--ink-20);border-radius:6px;background:var(--white);display:flex;align-items:center;gap:12px;padding:0 16px">
+            <span style="display:block;width:20px;height:20px;background:var(--ink-70);mask:url(https://unpkg.com/lucide-static@0.408.0/icons/search.svg) center/contain no-repeat"></span>
+            <span style="font-size:19px">sar</span><span style="width:2px;height:24px;background:var(--red-700);margin-left:-10px"></span>
+          </div>
+          <div style="font-size:14px;color:var(--ink-70);padding-top:8px">Name or email · 3 results</div>
+        </div>
+        <sc-for list="{{ lookup }}" as="r" hint-placeholder-count="3">
+          <div style="margin:0 16px;padding:16px 4px;border-top:1px solid var(--ink-12);display:flex;align-items:center;gap:12px">
+            <div style="flex:1"><div style="font-size:19px;font-weight:600">{{ r.name }}</div><div style="font-size:15px;color:var(--ink-70)">{{ r.tier }}</div></div>
+            <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:{{ r.st.bg }};color:{{ r.st.fg }};font-size:14px;font-weight:600"><span style="display:block;width:16px;height:16px;background:currentColor;mask:url({{ r.st.icon }}) center/contain no-repeat"></span>{{ r.st.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">06b · Recent scans · phone</div>
+      <div data-screen-label="Recent phone" style="width:390px;height:844px;border-radius:36px;overflow:hidden;background:var(--paper);border:1px solid var(--ink-12);display:flex;flex-direction:column">
+        <div style="padding:22px 20px 12px;display:flex;align-items:center;gap:10px">
+          <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--red-700)"><span style="display:block;width:24px;height:24px;background:currentColor;mask:url(https://unpkg.com/lucide-static@0.408.0/icons/arrow-left.svg) center/contain no-repeat"></span></span>
+          <span style="font-family:var(--font-display);font-size:30px;letter-spacing:-.01em;color:var(--red-700)">Recent</span>
+          <span style="margin-left:auto;font-size:14px;color:var(--ink-70)">Last 20 · this device</span>
+        </div>
+        <sc-for list="{{ recent }}" as="r" hint-placeholder-count="10">
+          <div style="margin:0 16px;padding:13px 4px;border-top:1px solid var(--ink-12);display:flex;align-items:center;gap:12px">
+            <span style="width:48px;font-size:15px;color:var(--ink-70)">{{ r.time }}</span>
+            <div style="flex:1;font-size:17px;font-weight:600">{{ r.name }}</div>
+            <span style="display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:{{ r.st.bg }};color:{{ r.st.fg }};font-size:13px;font-weight:600"><span style="display:block;width:14px;height:14px;background:currentColor;mask:url({{ r.st.icon }}) center/contain no-repeat"></span>{{ r.st.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">06c · Look up &amp; recent · tablet</div>
+      <div data-screen-label="Lookup tablet" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;background:var(--paper);border:1px solid var(--ink-12);display:grid;grid-template-columns:1fr 1fr">
+        <div style="padding:28px;display:flex;flex-direction:column;gap:12px;border-right:1px solid var(--ink-12)">
+          <div style="font-family:var(--font-display);font-size:34px;line-height:1.1;letter-spacing:-.01em;color:var(--red-700)">Look up</div>
+          <div style="height:60px;border:1px solid var(--ink-20);border-radius:6px;background:var(--white);display:flex;align-items:center;gap:12px;padding:0 18px">
+            <span style="display:block;width:22px;height:22px;background:var(--ink-70);mask:url(https://unpkg.com/lucide-static@0.408.0/icons/search.svg) center/contain no-repeat"></span>
+            <span style="font-size:20px">sar</span>
+          </div>
+          <div style="font-size:14px;color:var(--ink-70)">Name or email, 3 characters minimum</div>
+          <sc-for list="{{ lookup }}" as="r" hint-placeholder-count="3">
+            <div style="padding:18px 4px;border-top:1px solid var(--ink-12);display:flex;align-items:center;gap:12px">
+              <div style="flex:1"><div style="font-size:20px;font-weight:600">{{ r.name }}</div><div style="font-size:15px;color:var(--ink-70)">{{ r.tier }}</div></div>
+              <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:{{ r.st.bg }};color:{{ r.st.fg }};font-size:14px;font-weight:600"><span style="display:block;width:16px;height:16px;background:currentColor;mask:url({{ r.st.icon }}) center/contain no-repeat"></span>{{ r.st.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:28px;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:12px"><span style="font-family:var(--font-display);font-size:34px;letter-spacing:-.01em;color:var(--red-700)">Recent</span><span style="font-size:14px;color:var(--ink-70)">Last 20 · {{ station }}</span></div>
+          <sc-for list="{{ recent }}" as="r" hint-placeholder-count="12">
+            <div style="padding:12px 4px;border-top:1px solid var(--ink-12);display:flex;align-items:center;gap:14px">
+              <span style="width:48px;font-size:15px;color:var(--ink-70)">{{ r.time }}</span>
+              <div style="flex:1;font-size:17px;font-weight:600">{{ r.name }}</div>
+              <span style="display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:{{ r.st.bg }};color:{{ r.st.fg }};font-size:13px;font-weight:600"><span style="display:block;width:14px;height:14px;background:currentColor;mask:url({{ r.st.icon }}) center/contain no-repeat"></span>{{ r.st.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMER: WELCOME -->
+<section data-screen-label="Concierge welcome" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--red-700)">Customer-facing</div>
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Concierge welcome</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:62ch">One template, built on the founding-member screen: paper, red type, one pigeon. Only the eyebrow, line and pigeon change. First name only, clears after 8 seconds. Lapsed and unrecognised get the neutral welcome, with no hint why.</div>
+  </div>
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap;max-width:2460px">
+    <sc-for list="{{ welcomes }}" as="w" hint-placeholder-count="4">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">{{ w.label }}</div>
+        <div data-screen-label="{{ w.label }}" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;position:relative;background:var(--paper);border:1px solid var(--ink-12);color:var(--red-700);box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:36px;padding:0 120px">
+          <img src="assets/prologue-red.svg" alt="Prologue" style="position:absolute;top:56px;left:120px;height:34px">
+          <div style="display:flex"><x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Eyebrow" hint-size="auto,30px">{{ w.eyebrow }}</x-import></div>
+          <div style="font-family:var(--font-display);font-size:128px;line-height:1.02;letter-spacing:-.01em">Welcome back,<br>{{ w.name }}</div>
+          <div style="font-size:32px;line-height:1.3;max-width:24ch">{{ w.line }}</div>
+          <sc-if value="{{ w.pCoffee }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-coffee-line.png" alt="" style="position:absolute;right:72px;bottom:64px;width:280px"></sc-if>
+          <sc-if value="{{ w.pStack }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-reading-stack.png" alt="" style="position:absolute;right:72px;bottom:64px;width:280px"></sc-if>
+          <sc-if value="{{ w.pFlyBook }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-flying-book-line.png" alt="" style="position:absolute;right:72px;bottom:64px;width:280px"></sc-if>
+          <sc-if value="{{ w.pStanding }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-standing-line.png" alt="" style="position:absolute;right:72px;bottom:64px;width:280px"></sc-if>
+          <sc-if value="{{ w.pPerched }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-perched-line.png" alt="" style="position:absolute;right:72px;bottom:64px;width:280px"></sc-if>
+          <div style="position:absolute;left:120px;right:120px;bottom:40px;height:3px;border-radius:999px;background:rgba(173,59,40,.16);overflow:hidden"><div style="width:40%;height:100%;background:var(--red-700)"></div></div>
+        </div>
+      </div>
+    </sc-for>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">07e · Neutral · lapsed or not recognised</div>
+      <div data-screen-label="Welcome neutral" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;position:relative;background:var(--paper);border:1px solid var(--ink-12);color:var(--red-700);box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;text-align:center">
+        <img src="assets/p-mark-red.svg" alt="" style="height:96px">
+        <div style="font-family:var(--font-display);font-size:120px;line-height:1.04;letter-spacing:-.01em">Welcome to Prologue</div>
+        <div style="font-size:30px;color:var(--ink);max-width:26ch">Make yourself at home.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMER: SELF-SCAN -->
+<section data-screen-label="Self-scan splash" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--red-700)">Customer-facing</div>
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Self-scan splash</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:62ch">The same template when a member scans on their own, plus what is ready today and where to go next. No notes, history or buttons.</div>
+  </div>
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap;max-width:2460px">
+    <sc-for list="{{ splashes }}" as="s" hint-placeholder-count="4">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">{{ s.label }}</div>
+        <div data-screen-label="{{ s.label }}" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;position:relative;background:var(--paper);border:1px solid var(--ink-12);color:var(--red-700);box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:48px;padding:128px 64px 56px 120px">
+          <img src="assets/prologue-red.svg" alt="Prologue" style="position:absolute;top:56px;left:120px;height:34px">
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:24px;min-width:0">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Eyebrow" hint-size="auto,30px">{{ s.tier }}</x-import>
+              <sc-if value="{{ s.founding }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:8px 14px;border-radius:999px;background:var(--red-700);color:var(--paper)">Founding Member</span></sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Welcome back,</div>
+              <div style="font-family:var(--font-display);font-size:156px;line-height:.98;letter-spacing:-.01em">{{ s.name }}</div>
+            </div>
+            <div style="font-size:30px;line-height:1.3;max-width:20ch">{{ s.line }}</div>
+            <div style="font-size:20px;color:var(--ink-70)">Member since {{ s.since }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:flex-end;gap:20px">
+            <div style="display:flex;flex-direction:column">
+              <sc-if value="{{ s.pCoffee }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-coffee-line.png" alt="" style="width:150px;align-self:flex-end;margin:0 24px -4px 0;position:relative"></sc-if>
+          <sc-if value="{{ s.pStack }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-reading-stack.png" alt="" style="width:150px;align-self:flex-end;margin:0 24px -4px 0;position:relative"></sc-if>
+          <sc-if value="{{ s.pFlyBook }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-flying-book-line.png" alt="" style="width:150px;align-self:flex-end;margin:0 24px -4px 0;position:relative"></sc-if>
+          <sc-if value="{{ s.pStanding }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-standing-line.png" alt="" style="width:150px;align-self:flex-end;margin:0 24px -4px 0;position:relative"></sc-if>
+          <sc-if value="{{ s.pPerched }}" hint-placeholder-val="{{ false }}"><img src="assets/pigeon-perched-line.png" alt="" style="width:150px;align-self:flex-end;margin:0 24px -4px 0;position:relative"></sc-if>
+              <div style="background:var(--pink-100);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:6px">
+                <div style="font-family:var(--font-display);font-size:34px;line-height:1.1;letter-spacing:-.01em;padding-bottom:8px">{{ s.readyTitle }}</div>
+                <sc-for list="{{ s.ready }}" as="r" hint-placeholder-count="2">
+                  <div style="display:flex;gap:14px;align-items:center;padding:14px 0;border-top:1px solid rgba(173,59,40,.16)">
+                    <span style="display:block;width:26px;height:26px;flex:none;background:var(--red-700);mask:url({{ r.icon }}) center/contain no-repeat"></span>
+                    <div><div style="font-size:22px;font-weight:600">{{ r.name }}</div><div style="font-size:17px;color:var(--ink-70);margin-top:2px">{{ r.detail }}</div></div>
+                  </div>
+                </sc-for>
+                <div style="margin-top:12px;background:var(--red-700);color:var(--paper);border-radius:14px;padding:18px 20px;font-size:21px;font-weight:600;line-height:1.3">{{ s.next }}</div>
+              </div>
+            </div>
+            <div style="height:3px;border-radius:999px;background:rgba(173,59,40,.16);overflow:hidden"><div style="width:40%;height:100%;background:var(--red-700)"></div></div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">08e · Neutral · lapsed or not recognised</div>
+      <div data-screen-label="Splash neutral" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;position:relative;background:var(--paper);border:1px solid var(--ink-12);color:var(--red-700);box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;text-align:center">
+        <img src="assets/p-mark-red.svg" alt="" style="height:96px">
+        <div style="font-family:var(--font-display);font-size:120px;line-height:1.04;letter-spacing:-.01em">Welcome to Prologue</div>
+        <div style="font-size:30px;color:var(--ink);max-width:26ch">Pop over to the concierge desk and we'll help you from there.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMER: IDLE -->
+<section data-screen-label="Idle" style="display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--red-700)">Customer-facing</div>
+    <div style="font-family:var(--font-display);font-size:56px;line-height:1.08;letter-spacing:-.01em">Idle</div>
+    <div style="font-size:17px;color:var(--ink-70);max-width:62ch">Between scans on every customer-facing screen.</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-70)">09 · Idle · tablet landscape</div>
+    <div data-screen-label="Idle tablet" style="width:1180px;height:820px;border-radius:28px;overflow:hidden;position:relative;background:var(--red-700);color:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:150px;gap:32px;text-align:center;box-sizing:border-box">
+      <img src="assets/prologue-white.svg" alt="Prologue" style="position:absolute;top:56px;left:50%;transform:translateX(-50%);height:38px">
+      <x-import component-from-global-scope="PrologueDesignSystem_f7bff3.Eyebrow" tone="onRed" hint-size="auto,30px">Prologue Society</x-import>
+      <div style="font-family:var(--font-display);font-size:112px;line-height:1.02;letter-spacing:-.01em;max-width:12ch">Scan your Society card</div>
+      <div style="font-size:28px;color:var(--paper)">Wallet pass or printed card, under the scanner below</div>
+            <img src="assets/pigeon-perched-line-white.png" alt="" style="position:absolute;right:64px;bottom:56px;width:200px">
+      <div style="position:absolute;left:56px;bottom:56px;background:var(--paper);color:var(--ink);border-radius:20px;padding:14px 28px 14px 14px;display:flex;align-items:center;gap:22px;text-align:left">
+        <div style="width:124px;height:124px;border-radius:12px;background:var(--white);border:1px dashed var(--ink-20);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;letter-spacing:.16em;color:var(--ink-45)">QR</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--red-700)">Not a member yet?</div>
+          <div style="font-family:var(--font-display);font-size:30px;line-height:1.1;letter-spacing:-.01em">Scan to join the Society</div>
+          <div style="font-size:16px;color:var(--ink-70)">With your phone camera</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;station&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Bar&quot;,&quot;Floor&quot;,&quot;Concierge&quot;,&quot;Event door&quot;],&quot;default&quot;:&quot;Bar&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Staff&quot;},&quot;showPhotos&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Staff&quot;},&quot;lapsedStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Solid ink&quot;,&quot;Hatched&quot;],&quot;default&quot;:&quot;Solid ink&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Status&quot;}}">
+const flag = arr => arr.map(o => ({ ...o, pCoffee: o.pigeon === 'coffee', pStack: o.pigeon === 'stack', pFlyBook: o.pigeon === 'flybook', pStanding: o.pigeon === 'standing', pPerched: o.pigeon === 'perched' }));
+const I = n => `https://unpkg.com/lucide-static@0.408.0/icons/${n}.svg`;
+
+class Component extends DCLogic {
+  status() {
+    const hatched = (this.props.lapsedStyle ?? 'Solid ink') === 'Hatched';
+    return {
+      active: { label: 'Active', bg: '#2E6A48', fg: '#F5F3EF', dot: '#5FA77E', icon: I('circle-check') },
+      grace: { label: 'Grace', bg: '#E2AE48', fg: '#262622', dot: '#E2AE48', icon: I('clock') },
+      lapsed: { label: 'Lapsed', bg: hatched ? 'repeating-linear-gradient(135deg,#262622 0 16px,#3B3B36 16px 32px)' : '#262622', fg: '#F5F3EF', dot: '#F5F3EF', icon: I('ban') },
+      unknown: { label: 'Not recognised', bg: '#6E6C64', fg: '#F5F3EF', dot: '#9C9A92', icon: I('circle-help') },
+      offline: { label: 'Offline', bg: 'repeating-linear-gradient(135deg,#D6D3CA 0 16px,#E9E6DF 16px 32px)', fg: '#262622', dot: '#D6D3CA', icon: I('wifi-off') },
+    };
+  }
+  renderVals() {
+    const S = this.status();
+    const station = this.props.station ?? 'Bar';
+    const ok = '#262622';
+    const memberStates = [
+      { label: '02a · Active · founding member', st: S.active, sub: 'Paid and in date', action: 'Welcome them and offer benefits', dim: 1,
+        member: { name: 'Sarah Okafor', initials: 'SO', tier: 'Patron', founding: true, renewLine: 'Member since Mar 2024 · Renews 14 Mar 2027' },
+        benefits: [
+          { name: 'Monthly drink', detail: "November's drink", canMark: true, nameColor: ok },
+          { name: 'Poetry & Pints', detail: 'Society evening · tonight, 7pm', canMark: true, nameColor: ok },
+          { name: 'Personal shopping', detail: 'Used 12 Sep, 2:10pm · Floor', used: true, nameColor: 'rgba(38,38,34,.7)' },
+        ] },
+      { label: '02b · Grace', st: S.grace, sub: 'Payment failed · retrying until 18 Nov', action: 'Serve benefits. Mention payment politely', dim: 1,
+        member: { name: 'Tom Whitley', initials: 'TW', tier: 'Reader', renewLine: 'Member since Sep 2025 · Renewal due 4 Nov' },
+        benefits: [
+          { name: 'Monthly drink', detail: "November's drink", canMark: true, nameColor: ok },
+          { name: 'Personal shopping', detail: 'Used 2 Oct, 11:30am · Floor', used: true, nameColor: 'rgba(38,38,34,.7)' },
+        ] },
+      { label: '02c · Lapsed', st: S.lapsed, sub: 'Membership ended 2 Oct', action: 'No benefits. Offer to rejoin', dim: .5,
+        member: { name: 'Elena Marsh', initials: 'EM', tier: 'Reader', renewLine: 'Member Jan 2025 – Oct 2026 · Cancelled' },
+        benefits: [], notice: 'No benefits available', noticeSub: 'Let them know they can rejoin at the concierge desk or online.', noticeIcon: I('ban') },
+      { label: '02d · Not recognised', st: S.unknown, sub: "This code isn't valid", action: 'Try manual lookup', isUnknown: true, member: null, benefits: [] },
+      { label: '02e · Offline · birthday month', st: S.offline, sub: 'Saved 14 min ago · not verified', action: 'Serve as shown. Uses sync when back online', dim: 1,
+        member: { name: 'Priya Shah', initials: 'PS', tier: 'Patron', birthday: true, renewLine: 'Member since Jun 2024 · Renews 21 Jun 2027' },
+        benefits: [
+          { name: 'Birthday book', detail: 'Available this month', canMark: true, nameColor: ok },
+          { name: 'Monthly drink', detail: 'Used 3 Nov, 11:20am · Bar', used: true, nameColor: 'rgba(38,38,34,.7)' },
+        ], notice: 'Working offline', noticeSub: 'Anything marked as used now is queued and synced later.', noticeIcon: I('wifi-off') },
+    ];
+    const names = ['Sarah Okafor','Priya Shah','Unknown card','Tom Whitley','Alex Brennan','Elena Marsh','Marcus Hale','Grace Lowe','Ifeoma Bello','Dan Kerr','Unknown card','Ruth Ashworth','Sam Ito','Hana Novak','Owen Pryce','Lucy Barnes','Kit Morrow','Nadia Rahman','Joe Cassidy','Beth Hayes'];
+    const st = ['active','active','unknown','grace','active','lapsed','active','active','offline','active','unknown','active','grace','active','active','lapsed','active','active','active','active'];
+    const recent = names.map((n, i) => {
+      const mins = 19 * 60 + 42 - i * 9;
+      const h = Math.floor(mins / 60), m = mins % 60;
+      return { name: n, st: S[st[i]], time: `${h > 12 ? h - 12 : h}:${String(m).padStart(2, '0')}` };
+    });
+    const paper = '#F5F3EF', red = '#AD3B28';
+    return {
+      station,
+      showPhotos: this.props.showPhotos ?? true,
+      scanPhones: [
+        { label: '01a · Scan · scanning', bracket: paper, frameFill: 'transparent', caption: 'Point at a Society card or wallet pass', captionColor: 'rgba(245,243,239,.7)', read: false },
+        { label: '01b · Scan · good read', bracket: '#5FA77E', frameFill: 'rgba(46,106,72,.25)', caption: 'Read. Opening member…', captionColor: paper, read: true },
+      ],
+      recent, recentShort: recent.slice(0, 5),
+      memberStates,
+      lookup: [
+        { name: 'Sarah Okafor', tier: 'Patron · Founding', st: S.active },
+        { name: 'Saroj Patel', tier: 'Reader', st: S.grace },
+        { name: 'Sara Lindqvist', tier: 'Reader', st: S.lapsed },
+      ],
+      conciergeToday: [
+        { name: 'Birthday book', detail: 'Any paperback, birthday month' },
+        { name: 'Monthly drink', detail: "November's drink" },
+        { name: 'Poetry & Pints', detail: 'Society evening · tonight, 7pm' },
+      ],
+      conciergeBenefits: [
+        { name: 'Monthly drink', count: '5 of 5', log: '3 Oct · Bar   ·   6 Sep · Bar   ·   9 Aug · Concierge' },
+        { name: 'Society evenings', count: '3 attended', log: '18 Sep · Event door   ·   21 Aug · Event door' },
+        { name: 'Personal shopping', count: '0 of 1', log: 'Booked for today' },
+        { name: 'Birthday book', count: '0 of 1', log: 'Available in November' },
+      ],
+      visitsSummary: '23 this year',
+      conciergeVisits: [
+        { when: 'Today, 2:48pm', where: 'Concierge', dot: '#2E6A48', weight: 600 },
+        { when: 'Mon 3 Nov, 11:20am', where: 'Bar', dot: 'rgba(38,38,34,.45)', weight: 400 },
+        { when: 'Sat 25 Oct, 4:05pm', where: 'Floor', dot: 'rgba(38,38,34,.45)', weight: 400 },
+        { when: 'Fri 3 Oct, 6:40pm', where: 'Bar', dot: 'rgba(38,38,34,.45)', weight: 400 },
+        { when: 'Thu 18 Sep, 6:52pm', where: 'Event door', dot: 'rgba(38,38,34,.45)', weight: 400 },
+      ],
+      notesCount: 4,
+      conciergeKnow: [
+        { k: 'Member since', v: 'June 2024' },
+        { k: 'Tier', v: 'Patron' },
+        { k: 'Founding', v: 'No' },
+        { k: 'Birthday', v: '21 November' },
+        { k: 'Books', v: 'Piranesi · The Remains of the Day' },
+        { k: 'Genres', v: 'Translated fiction, nature writing' },
+      ],
+      conciergeNotes: [
+        { text: 'Asked us to hold the next translated fiction prize shortlist for her.', by: 'Jo · 2 Nov' },
+        { text: 'Birthday on the 21st. Mentioned she might bring friends to Poetry & Pints.', by: 'Sam · 25 Oct' },
+        { text: 'Loved the Piranesi recommendation, wants something similar but shorter.', by: 'Mina · 3 Oct' },
+        { text: 'Oat milk. Usually sits at the window table.', by: 'Mina · 14 Sep' },
+      ],
+      welcomes: flag([
+        { label: '07a · Monthly drink ready', eyebrow: 'Prologue Society', name: 'Alex', line: 'Your monthly drink is waiting at the bar.', pigeon: 'coffee' },
+        { label: '07b · Birthday month', eyebrow: 'Happy birthday month', name: 'Priya', line: 'Your birthday book is ready. Pick any paperback on us.', pigeon: 'stack' },
+        { label: "07c · On tonight's list", eyebrow: 'Society evening', name: 'Tom', line: "You're on the list for Poetry & Pints at 7pm.", pigeon: 'flybook' },
+        { label: '07d · Founding member', eyebrow: 'Founding member', name: 'Sarah', line: 'Good to have you back, from the first page.', pigeon: 'standing' },
+      ]),
+      splashes: flag([
+        { label: '08a · Standard member', name: 'Alex', tier: 'Reader', since: 'January 2025', line: 'Good to see you again.', pigeon: 'coffee', readyTitle: 'Ready for you today',
+          ready: [{ name: 'Monthly drink', detail: 'Any drink from the bar menu', icon: I('coffee') }], next: 'Show this at the bar for your drink →' },
+        { label: '08b · Founding member', name: 'Sarah', tier: 'Patron', founding: true, since: 'March 2024', line: 'Here from the first page, and every one since.', pigeon: 'standing', readyTitle: 'Ready for you today',
+          ready: [{ name: 'Monthly drink', detail: 'Any drink from the bar menu', icon: I('coffee') }, { name: 'Poetry & Pints', detail: "You're on the list · tonight, 7pm", icon: I('ticket') }], next: 'Show this at the bar for your drink →' },
+        { label: '08c · Birthday month', name: 'Priya', tier: 'Patron', since: 'June 2024', line: 'Happy birthday month. Something to read is on us.', pigeon: 'stack', readyTitle: 'Ready for you today',
+          ready: [{ name: 'Birthday book', detail: 'Any paperback, on us', icon: I('book-open') }, { name: 'Monthly drink', detail: 'Any drink from the bar menu', icon: I('coffee') }], next: 'Pick a paperback, then show this at the till →' },
+        { label: '08d · Nothing available today', name: 'Marcus', tier: 'Reader', since: 'August 2025', line: 'Lovely to see you. Make yourself at home.', pigeon: 'perched', readyTitle: 'All collected for now',
+          ready: [{ name: 'Next drink', detail: 'Ready from 1 December', icon: I('calendar') }], next: 'The shelves are all yours today.' },
+      ]),
+    };
+  }
+}
+</script>
+</body>
+</html>

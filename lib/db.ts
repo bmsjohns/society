@@ -14,6 +14,7 @@ function make() {
   if (!url) throw new Error("DATABASE_URL is not set");
   return postgres(url, {
     prepare: false,
+    ssl: /localhost|127\.0\.0\.1/.test(url) ? false : "require",
     max: process.env.NODE_ENV === "production" ? 3 : 5,
     idle_timeout: 20,
     connect_timeout: 10,

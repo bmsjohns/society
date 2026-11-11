@@ -191,7 +191,7 @@ export async function searchMembers(q: string, now = new Date()): Promise<Lookup
     select id, first_name, last_name, tier, subscription_status, grace_until
     from members
     where lower(full_name) like ${like} or lower(email) like ${like}
-    order by (lower(full_name) like ${term + "%"}) desc, similarity(lower(full_name), ${term}) desc, full_name
+    order by (lower(full_name) like ${term + "%"}) desc, extensions.similarity(lower(full_name), ${term}) desc, full_name
     limit 20`;
   return rows.map((r) => ({
     memberId: r.id,

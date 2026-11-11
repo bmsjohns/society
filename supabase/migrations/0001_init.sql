@@ -3,8 +3,9 @@
 -- switched on for every table with no policies, so Supabase's public REST API
 -- (anon key) can read and write nothing.
 
-create extension if not exists pg_trgm;
-create extension if not exists pgcrypto;
+create schema if not exists extensions;
+create extension if not exists pg_trgm with schema extensions;
+-- gen_random_uuid() is built in from Postgres 13
 
 -- ---------------------------------------------------------------- members
 create table members (
@@ -49,8 +50,8 @@ create table members (
   updated_at                 timestamptz not null default now()
 );
 create unique index members_email_key on members (lower(email)) where email is not null;
-create index members_name_trgm on members using gin (full_name gin_trgm_ops);
-create index members_email_trgm on members using gin (lower(email) gin_trgm_ops);
+create index members_name_trgm on members using gin (full_name extensions.gin_trgm_ops);
+create index members_email_trgm on members using gin (lower(email) extensions.gin_trgm_ops);
 
 -- ---------------------------------------------------------------- tokens
 -- What the QR holds. Opaque, e.g. PS-7F3K9Q2M. A lost card: revoke and issue a new one.
@@ -180,7 +181,7 @@ create table stations (
 );
 
 -- ---------------------------------------------------------------- housekeeping
-create or replace function touch_updated_at() returns trigger language plpgsql as $$
+create or replace function touch_updated_at() returns trigger language plpgsql set search_path = '' as $$
 begin new.updated_at = now(); return new; end $$;
 create trigger members_touch before update on members for each row execute function touch_updated_at();
 
@@ -203,3 +204,16 @@ insert into benefits (key, name, short_name, description, allowance, redeemable,
   ('personal_shopping', 'Personal shopping session',   'Personal shopping',  'One 20-minute session with a bookseller each membership year', 'membership_year', true, false, '{Founding,Standard}', 40),
   ('priority_booking',  'Priority / presale booking',  'Priority booking',   'Early access to event tickets',                          'unlimited',       false, false, '{Founding,Standard}', 50),
   ('member_hotline',    'Member hotline',              'Member hotline',     'Direct line for orders and recommendations',            'unlimited',       false, false, '{Founding,Standard}', 60);
+
+-- On Supabase: the browser-facing roles get nothing at all (belt and braces with RLS above).
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke all on all tables in schema public from anon, authenticated';
+    execute 'revoke all on all sequences in schema public from anon, authenticated';
+    execute 'revoke all on all functions in schema public from anon, authenticated';
+    execute 'alter default privileges in schema public revoke all on tables from anon, authenticated';
+    execute 'alter default privileges in schema public revoke all on sequences from anon, authenticated';
+    execute 'alter default privileges in schema public revoke all on functions from anon, authenticated';
+  end if;
+end $$;

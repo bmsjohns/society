@@ -22,7 +22,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const noAuth = process.env.DEV_NO_AUTH === "1" && process.env.NODE_ENV !== "production";
+const noAuth = (process.env.DEV_NO_AUTH === "1" && process.env.NODE_ENV !== "production") || !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const body = (

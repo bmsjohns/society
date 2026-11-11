@@ -32,7 +32,7 @@ All Society data lives in Supabase (`supabase/migrations`). Airtable is no longe
 
 ## Set up
 
-1. **Supabase.** The easiest route is Vercel → project → *Storage* → *Supabase* (choose the London region). It sets `POSTGRES_URL` and `POSTGRES_URL_NON_POOLING`, which the app reads, and production deploys run the migrations automatically. Using an existing Supabase project instead? Set `DATABASE_URL` (the Transaction pooler string, port 6543) and `MIGRATE_DATABASE_URL` (the Session pooler string, port 5432).
+1. **Supabase.** Apply `supabase/migrations/*.sql` in order (SQL editor, the Supabase connector, or `MIGRATE_DATABASE_URL=... npm run db:migrate`). The app connects as its own login, `scan_app`. Create it once with `create role scan_app login password '<random>' noinherit;` before running `0002_app_role.sql`. It can read and write the app's tables and nothing else. Set `DATABASE_URL` in Vercel to the **Transaction pooler** string with that login: `postgresql://scan_app.<project-ref>:<password>@aws-1-<region>.pooler.supabase.com:6543/postgres`. Builds apply migrations only when an admin `MIGRATE_DATABASE_URL` is set.
 2. **Clerk.** Create an application and turn on email sign-in only. Under *Restrictions*, allowlist `prologuebooks.co.uk`. Optionally add `{"email": "{{user.primary_email_address}}"}` to the session token (saves a lookup per request). Set `ALLOWED_EMAIL_DOMAINS` as well; the server checks it too.
 3. **Vercel.** Import the repo and add every variable in `.env.example`. Add the domain `scan.prologuebooks.co.uk`. The cron in `vercel.json` needs `CRON_SECRET`.
 4. **Chargebee.** Settings → Webhooks → add `https://scan.prologuebooks.co.uk/api/webhooks/chargebee` with Basic auth, then point the old Make scenario's member sync at nothing.

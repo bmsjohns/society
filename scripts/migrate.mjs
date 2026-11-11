@@ -4,9 +4,10 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import postgres from "postgres";
 
-const url = process.env.MIGRATE_DATABASE_URL ?? process.env.DATABASE_URL;
-if (!url) throw new Error("Set DATABASE_URL (or MIGRATE_DATABASE_URL)");
-const sql = postgres(url, { max: 1, onnotice: () => {} });
+const url = process.env.MIGRATE_DATABASE_URL ?? process.env.POSTGRES_URL_NON_POOLING ?? process.env.DATABASE_URL;
+if (!url) throw new Error("Set MIGRATE_DATABASE_URL (or POSTGRES_URL_NON_POOLING / DATABASE_URL)");
+// Supabase's direct/session strings need TLS; local Postgres doesn't.
+const sql = postgres(url, { max: 1, onnotice: () => {}, ssl: /localhost|127\.0\.0\.1/.test(url) ? false : "require" });
 const dir = path.join(path.dirname(new URL(import.meta.url).pathname), "..", "supabase", "migrations");
 
 await sql`create table if not exists schema_migrations (name text primary key, applied_at timestamptz not null default now())`;

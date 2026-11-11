@@ -10,7 +10,8 @@
     "test": "vitest run",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed-demo": "node scripts/seed-demo.mjs",
-    "import:airtable": "node scripts/import-airtable.mjs"
+    "import:airtable": "node scripts/import-airtable.mjs",
+    "vercel-build": "node scripts/vercel-build.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -1,3 +1,9 @@
 {
-  "crons": [{ "path": "/api/cron/retention", "schedule": "17 3 * * *" }]
+  "crons": [
+    {
+      "path": "/api/cron/retention",
+      "schedule": "17 3 * * *"
+    }
+  ],
+  "buildCommand": "npm run vercel-build"
 }

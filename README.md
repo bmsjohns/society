@@ -32,11 +32,7 @@ All Society data lives in Supabase (`supabase/migrations`). Airtable is no longe
 
 ## Set up
 
-1. **Supabase.** Create a project in the EU (London) region. From *Connect*, copy the **Transaction pooler** string (port 6543) for `DATABASE_URL` and the **Session pooler** string (port 5432) for `MIGRATE_DATABASE_URL`. Then run:
-   ```bash
-   npm install
-   MIGRATE_DATABASE_URL=... npm run db:migrate
-   ```
+1. **Supabase.** The easiest route is Vercel → project → *Storage* → *Supabase* (choose the London region). It sets `POSTGRES_URL` and `POSTGRES_URL_NON_POOLING`, which the app reads, and production deploys run the migrations automatically. Using an existing Supabase project instead? Set `DATABASE_URL` (the Transaction pooler string, port 6543) and `MIGRATE_DATABASE_URL` (the Session pooler string, port 5432).
 2. **Clerk.** Create an application and turn on email sign-in only. Under *Restrictions*, allowlist `prologuebooks.co.uk`. Optionally add `{"email": "{{user.primary_email_address}}"}` to the session token (saves a lookup per request). Set `ALLOWED_EMAIL_DOMAINS` as well; the server checks it too.
 3. **Vercel.** Import the repo and add every variable in `.env.example`. Add the domain `scan.prologuebooks.co.uk`. The cron in `vercel.json` needs `CRON_SECRET`.
 4. **Chargebee.** Settings → Webhooks → add `https://scan.prologuebooks.co.uk/api/webhooks/chargebee` with Basic auth, then point the old Make scenario's member sync at nothing.

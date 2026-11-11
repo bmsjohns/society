@@ -52,6 +52,17 @@ describe.skipIf(!enabled)("redemption against Postgres", async () => {
     expect(r.revokedAt).toBeInstanceOf(Date);
   });
 
+  it("printed card links resolve; spare cards report as spare", async () => {
+    await sql`insert into member_tokens (token, member_id) values ('recTESTabcdEFGH12', ${alex.id}) on conflict do nothing`;
+    await sql`insert into member_tokens (token, member_id, label, card_number) values ('recSPAREabcdEFG12', null, 'Spare card 07', 120) on conflict do nothing`;
+    const card = await findByToken("recTESTabcdEFGH12");
+    expect(card.member?.first_name).toBe("Alex");
+    expect((await findByToken("RECTESTABCDEFGH12")).member).toBeNull(); // record IDs are case-sensitive
+    const spare = await findByToken("recSPAREabcdEFG12");
+    expect(spare).toMatchObject({ member: null, spare: { label: "Spare card 07", cardNumber: 120 } });
+    await sql`delete from member_tokens where token in ('recTESTabcdEFGH12', 'recSPAREabcdEFG12')`;
+  });
+
   it("lookup by name or email, 3 characters minimum", async () => {
     expect(await searchMembers("pr")).toHaveLength(0);
     expect((await searchMembers("pri"))[0].fullName).toBe("Priya Shah");

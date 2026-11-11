@@ -86,7 +86,8 @@ export type DisplayPayload = WelcomePayload | SplashPayload;
 
 export type ScanResponse =
   | { kind: "member"; token: string; view: StaffMemberView | ConciergeView }
-  | { kind: "unrecognised"; token: string; band: StatusBand };
+  | { kind: "unrecognised"; token: string; band: StatusBand }
+  | { kind: "spare"; token: string; label: string; band: StatusBand };
 
 export type LookupResult = {
   memberId: string;

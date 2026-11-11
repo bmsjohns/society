@@ -5,6 +5,7 @@ import {
   memberState, periodKey, sinceLine, splashPayload, statusBand, todayRows, welcomePayload,
 } from "./rules";
 import { MONTHS, fmtWhen, londonToday, parseYMD, ymdKey } from "./time";
+import { TOKEN_RE } from "./token-format";
 import type { ConciergeView, LookupResult, Note, RecentScan, ScanState, StaffMemberView, Visit } from "./types";
 
 export type FullMember = MemberRecord & {
@@ -26,13 +27,17 @@ export async function getMember(id: string): Promise<FullMember | null> {
   return rows[0] ?? null;
 }
 
-export async function findByToken(token: string): Promise<{ member: FullMember | null; revokedAt: Date | null }> {
-  const t = token.trim().toUpperCase();
-  if (!/^PS-[0-9A-Z]{8}$/.test(t)) return { member: null, revokedAt: null };
-  const [row] = await db()`select member_id, revoked_at from member_tokens where token = ${t}`;
-  if (!row) return { member: null, revokedAt: null };
-  if (row.revoked_at) return { member: null, revokedAt: row.revoked_at };
-  return { member: await getMember(row.member_id), revokedAt: null };
+export type TokenLookup = { member: FullMember | null; revokedAt: Date | null; spare: { label: string; cardNumber: number | null } | null };
+
+export async function findByToken(token: string): Promise<TokenLookup> {
+  const none = { member: null, revokedAt: null, spare: null };
+  const t = token.trim();
+  if (!TOKEN_RE.test(t)) return none;
+  const [row] = await db()`select member_id, revoked_at, label, card_number from member_tokens where token = ${t}`;
+  if (!row) return none;
+  if (row.revoked_at) return { ...none, revokedAt: row.revoked_at };
+  if (!row.member_id) return { ...none, spare: { label: row.label ?? "Spare card", cardNumber: row.card_number } };
+  return { member: await getMember(row.member_id), revokedAt: null, spare: null };
 }
 
 let benefitCache: { at: number; rows: Benefit[] } | null = null;

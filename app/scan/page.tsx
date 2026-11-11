@@ -10,14 +10,16 @@ import { useScanner } from "@/components/Scanner";
 import { ScanHeader } from "@/components/ScanHeader";
 import { MemberScreen, UnrecognisedScreen } from "@/components/MemberScreen";
 import { Icon } from "@/components/Icon";
+import { SpareCardScreen } from "@/components/SpareCard";
 import { fmtClock } from "@/lib/time";
+import { extractToken } from "@/lib/token-format";
 
 type Shown =
   | { kind: "member"; view: StaffMemberView; offlineSavedAt: number | null }
-  | { kind: "unrecognised"; band: StatusBand };
+  | { kind: "unrecognised"; band: StatusBand }
+  | { kind: "spare"; token: string; label: string; band: StatusBand };
 
 const LABEL: Record<string, string> = { active: "Active", grace: "Grace", lapsed: "Lapsed", unrecognised: "Not recognised", offline: "Offline" };
-const TOKEN_RE = /PS-[0-9A-Z]{8}/i;
 
 export default function ScanPage() {
   const router = useRouter();
@@ -49,12 +51,14 @@ export default function ScanPage() {
       if (r.kind === "member") {
         cacheView(r.view, r.token);
         next = { kind: "member", view: r.view, offlineSavedAt: null };
+      } else if (r.kind === "spare") {
+        next = { kind: "spare", token: r.token, label: r.label, band: r.band };
       } else {
         badRead();
         next = { kind: "unrecognised", band: r.band };
       }
     } catch (e) {
-      const token = TOKEN_RE.exec(raw)?.[0]?.toUpperCase();
+      const token = extractToken(raw);
       const hit = token ? cachedByToken(token) : null;
       if (isNetworkError(e) && hit) next = { kind: "member", view: hit.view, offlineSavedAt: hit.savedAt };
       else next = {
@@ -129,6 +133,16 @@ export default function ScanPage() {
       </div>
       {shown?.kind === "member" && (
         <MemberScreen view={shown.view} station={station} offlineSavedAt={shown.offlineSavedAt} onDone={back} onChanged={refresh} />
+      )}
+      {shown?.kind === "spare" && (
+        <SpareCardScreen token={shown.token} label={shown.label} band={shown.band} station={station} onScanAgain={back}
+          onAssigned={async (id) => {
+            try {
+              const r = await api<{ view: StaffMemberView }>(`/api/members/${id}`);
+              cacheView(r.view);
+              setShown({ kind: "member", view: r.view, offlineSavedAt: null });
+            } catch { back(); }
+          }} />
       )}
       {shown?.kind === "unrecognised" && (
         <UnrecognisedScreen band={shown.band} station={station} onScanAgain={back} onLookup={() => router.push("/lookup")} />

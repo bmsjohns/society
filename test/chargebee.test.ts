@@ -42,6 +42,13 @@ describe("tokens", () => {
   it("are opaque PS- codes without ambiguous characters", () => {
     for (let i = 0; i < 200; i++) expect(newToken()).toMatch(/^PS-[2-9A-HJ-NP-Z]{8}$/);
   });
+  it("printed cards: the Airtable record ID from the card link, case kept", () => {
+    expect(extractToken("https://society.prologuebooks.co.uk/m/recPl7QG8mKNSNCFN")).toBe("recPl7QG8mKNSNCFN");
+    expect(extractToken("https://society.prologuebooks.co.uk/m/recPl7QG8mKNSNCFN?utm=x")).toBe("recPl7QG8mKNSNCFN");
+    expect(extractToken("recf3edhQqNoTstJu")).toBe("recf3edhQqNoTstJu");
+    expect(extractToken("https://society.prologuebooks.co.uk/m/recTooLongToBeAnId123")).toBeNull();
+    expect(extractToken("https://example.com/other/recPl7QG8mKNSNCFNx")).toBeNull();
+  });
   it("are found inside whatever the QR holds", () => {
     expect(extractToken("PS-7F3K9Q2M")).toBe("PS-7F3K9Q2M");
     expect(extractToken("https://prologuebooks.co.uk/m/ps-7f3k9q2m")).toBe("PS-7F3K9Q2M");

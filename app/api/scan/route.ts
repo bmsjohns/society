@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { currentDevice, currentStaff, requireDevice, route } from "@/lib/auth";
 import { conciergeView, displayPayloads, findByToken, loadContext, logScan, staffView } from "@/lib/repo";
-import { unrecognisedBand, welcomeDisplayLine } from "@/lib/rules";
+import { spareBand, unrecognisedBand, welcomeDisplayLine } from "@/lib/rules";
 import { pushToStation } from "@/lib/stations";
 import { extractToken } from "@/lib/tokens";
 import type { ScanResponse } from "@/lib/types";
@@ -15,13 +15,15 @@ export const POST = route(async (req: Request) => {
   const { raw } = Body.parse(await req.json());
   const [device, staff] = await Promise.all([currentDevice(), currentStaff()]);
   const token = extractToken(raw);
-  const { member, revokedAt } = token ? await findByToken(token) : { member: null, revokedAt: null };
+  const { member, revokedAt, spare } = token ? await findByToken(token) : { member: null, revokedAt: null, spare: null };
   const concierge = device.mode === "concierge" && device.code;
 
   if (!member) {
     await logScan({ token: token ?? raw.slice(0, 40), memberId: null, result: "unrecognised", station: device.station, mode: device.mode, staffId: staff?.id ?? null, deviceId: device.id });
     if (concierge) await pushToStation(device.code!, { payload: { kind: "neutral" }, scan: null });
-    const res: ScanResponse = { kind: "unrecognised", token: token ?? "", band: unrecognisedBand(revokedAt) };
+    const res: ScanResponse = spare
+      ? { kind: "spare", token: token!, label: spare.label, band: spareBand(spare.label) }
+      : { kind: "unrecognised", token: token ?? "", band: unrecognisedBand(revokedAt) };
     return NextResponse.json(res);
   }
 

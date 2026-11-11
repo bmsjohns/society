@@ -9,7 +9,7 @@ import { Icon, STATE_ICON } from "@/components/Icon";
 import { TodayCard, UndoSheet } from "@/components/MemberScreen";
 import { MONTHS } from "@/lib/time";
 
-type Current = { seq: number; scan: { token: string | null; memberId: string | null; revokedAt: string | null } | null; displayOnline: boolean; name: string };
+type Current = { seq: number; scan: { token: string | null; memberId: string | null; revokedAt: string | null; spare?: string | null } | null; displayOnline: boolean; name: string };
 
 export default function Page() {
   return <Suspense><Concierge /></Suspense>;
@@ -75,11 +75,13 @@ function Concierge() {
           if (c.scan?.memberId) open(c.scan.memberId);
           else if (c.scan) {
             setView(null);
-            setUnknown({
-              state: "unrecognised", label: "Not recognised",
-              detail: c.scan.revokedAt ? "This card has been replaced" : "This code isn't valid",
-              instruction: "Try manual lookup. The member sees a neutral welcome",
-            });
+            setUnknown(c.scan.spare
+              ? { state: "unrecognised", label: "Spare card", detail: `${c.scan.spare} · not yet given to a member`, instruction: "Give it to them from a manager's scanner, or Manage → Cards" }
+              : {
+                  state: "unrecognised", label: "Not recognised",
+                  detail: c.scan.revokedAt ? "This card has been replaced" : "This code isn't valid",
+                  instruction: "Try manual lookup. The member sees a neutral welcome",
+                });
           }
         }
       } catch {}

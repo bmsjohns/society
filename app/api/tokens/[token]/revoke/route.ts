@@ -10,7 +10,7 @@ export const POST = route(async (req: Request, { params }: { params: Promise<{ t
   const { token } = await params;
   const { reason } = Body.parse(await req.json().catch(() => ({})));
   const [row] = await db()`update member_tokens set revoked_at = now(), revoked_reason = ${reason}
-    where token = ${token.toUpperCase()} and revoked_at is null returning token`;
+    where token = ${token} and revoked_at is null returning token`;
   if (!row) throw new HttpError(404, "Token not found or already revoked");
   return NextResponse.json({ ok: true });
 });

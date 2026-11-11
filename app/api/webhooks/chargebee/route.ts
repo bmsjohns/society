@@ -2,7 +2,6 @@ import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { CbEvent, MemberPatch, patchFromEvent } from "@/lib/chargebee";
 import { db } from "@/lib/db";
-import { newToken } from "@/lib/tokens";
 
 // Chargebee → Settings → Webhooks: URL https://<host>/api/webhooks/chargebee with Basic auth
 // set to CHARGEBEE_WEBHOOK_USER / CHARGEBEE_WEBHOOK_PASSWORD. Replaces the Make → Airtable sync,
@@ -47,6 +46,6 @@ export async function POST(req: Request) {
   const row = { ...set, chargebee_customer_id: patch.chargebee_customer_id, join_date: patch.join_date ?? null };
   const [created] = await sql`insert into members ${sql(row as never)}
     on conflict (chargebee_customer_id) do nothing returning id`;
-  if (created) await sql`insert into member_tokens (token, member_id, kind) values (${newToken()}, ${created.id}, 'card')`;
+  // No code is issued here: new members are handed a spare printed card, which a manager links to them.
   return NextResponse.json({ created: created?.id ?? null });
 }

@@ -21,7 +21,7 @@ export const POST = route(async (req: Request, { params }: { params: Promise<{ c
   const { raw } = Body.parse(await req.json());
   const device = await currentDevice();
   const token = extractToken(raw);
-  const { member, revokedAt } = token ? await findByToken(token) : { member: null, revokedAt: null };
+  const { member, revokedAt, spare } = token ? await findByToken(token) : { member: null, revokedAt: null, spare: null };
   const live = staffLive(station);
   const stationName = station.name as string;
 
@@ -37,7 +37,7 @@ export const POST = route(async (req: Request, { params }: { params: Promise<{ c
   }
   const seq = await pushToStation(code, {
     payload,
-    scan: { token, memberId: member?.id ?? null, revokedAt: revokedAt ? revokedAt.toISOString() : null },
+    scan: { token, memberId: member?.id ?? null, revokedAt: revokedAt ? revokedAt.toISOString() : null, spare: spare?.label ?? null },
   });
   return NextResponse.json({ payload, seq });
 });

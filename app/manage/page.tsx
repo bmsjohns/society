@@ -205,7 +205,7 @@ function EventsTab({ d, reload }: { d: Overview; reload: () => void }) {
   );
 }
 
-type Tok = { token: string; kind: string; issued_at: string; revoked_at: string | null; revoked_reason: string | null };
+type Tok = { token: string; kind: string; label: string | null; card_number: number | null; issued_at: string; revoked_at: string | null; revoked_reason: string | null };
 
 function CardsTab() {
   const [memberId, setMemberId] = useState<string | null>(null);
@@ -229,10 +229,10 @@ function CardsTab() {
   return (
     <div className="section">
       <h2>Member codes</h2>
-      <p className="muted">Each QR holds an opaque code like PS-7F3K9Q2M. For a lost card, issue a new code: the old one stops working at once.</p>
+      <p className="muted">Printed cards hold a link ending in the member&apos;s card ID (rec…). For a lost card, scan a spare card and give it to the member, or issue a PS- code. The old card stops working at once.</p>
       <table className="log"><thead><tr><th>Code</th><th>Type</th><th>Issued</th><th>Status</th><th /></tr></thead>
         <tbody>{tokens.map((t) => (
-          <tr key={t.token}><td><b>{t.token}</b></td><td>{t.kind}</td><td>{fmtDayMonth(new Date(t.issued_at))}</td>
+          <tr key={t.token}><td><b>{t.token}</b>{t.card_number ? <><br /><span className="muted">Card no. {t.card_number}{t.label ? ` · ${t.label}` : ""}</span></> : null}</td><td>{t.token.startsWith("rec") ? "printed card" : t.kind}</td><td>{fmtDayMonth(new Date(t.issued_at))}</td>
             <td>{t.revoked_at ? `Revoked ${fmtDayMonth(new Date(t.revoked_at))}` : "Active"}</td>
             <td>{!t.revoked_at && <button className="btn btn-outline btn-sm" onClick={() => revoke(t.token)}>Revoke</button>}</td></tr>
         ))}</tbody></table>

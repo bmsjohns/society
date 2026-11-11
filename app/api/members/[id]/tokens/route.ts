@@ -7,7 +7,7 @@ import { newToken } from "@/lib/tokens";
 export const GET = route(async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
   await requireManager();
   const { id } = await params;
-  const tokens = await db()`select token, kind, issued_at, revoked_at, revoked_reason from member_tokens where member_id = ${id} order by issued_at desc`;
+  const tokens = await db()`select token, kind, label, card_number, issued_at, revoked_at, revoked_reason from member_tokens where member_id = ${id} order by issued_at desc`;
   return NextResponse.json({ tokens });
 });
 

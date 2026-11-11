@@ -19,7 +19,7 @@ export function staffLive(station: { staff_seen_at: Date | null }) {
 /** Show something on the welcome screen and/or open a member on the staff view. */
 export async function pushToStation(
   code: string,
-  p: { payload: DisplayPayload | null; scan: { token: string | null; memberId: string | null; revokedAt: string | null } | null },
+  p: { payload: DisplayPayload | null; scan: { token: string | null; memberId: string | null; revokedAt: string | null; spare?: string | null } | null },
 ) {
   const [row] = await db()`
     update stations set

@@ -86,6 +86,14 @@ export function unrecognisedBand(revokedAt?: Date | null): StatusBand {
   };
 }
 
+export function spareBand(label: string): StatusBand {
+  return {
+    state: "unrecognised", label: "Spare card",
+    detail: `${label} · not yet given to a member`,
+    instruction: "A manager can give it to a member now",
+  };
+}
+
 // ------------------------------------------------------------------ periods
 
 /** Which allowance window a use made `now` counts against. null = not limited. */

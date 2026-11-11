@@ -9,7 +9,7 @@ import type { DeviceMode } from "@/lib/types";
 const MODES: { mode: DeviceMode; title: string; sub: string }[] = [
   { mode: "staff", title: "Staff scanner", sub: "Bar, floor handhelds and the event door. Scan, see the member, mark as used." },
   { mode: "concierge", title: "Concierge staff view", sub: "The tablet facing staff at the desk. Full profile, notes, today's benefits." },
-  { mode: "welcome", title: "Customer screen", sub: "Faces the member, with the scanner. Shows the welcome, or the self-scan splash when no staff view is open." },
+  { mode: "welcome", title: "Customer screen", sub: "Faces the member, who scans their own card. Works alone as a self-scan screen, or alongside the staff view." },
 ];
 const STATIONS: DeviceSettings["station"][] = ["Bar", "Concierge", "Floor", "Event door"];
 
@@ -30,9 +30,25 @@ export default function Setup() {
   const set = (p: Partial<DeviceSettings>) => setD((x) => ({ ...x, ...p }));
   const paired = d.mode === "concierge" || d.mode === "welcome";
 
-  const save = () => {
-    if (paired && !d.code) return setError("Choose the desk this device belongs to. A manager creates desks under Manage.");
-    saveDevice({ ...d, station: paired ? "Concierge" : d.station });
+  // One desk: use it. None: create "Concierge desk" on save. Only ask when there are several.
+  const deskCode = d.code && stations.some((s) => s.code === d.code) ? d.code : stations.length === 1 ? stations[0].code : null;
+  const [saving, setSaving] = useState(false);
+
+  const save = async () => {
+    setError(null);
+    let code = paired ? deskCode : null;
+    if (paired && !code) {
+      if (stations.length > 1) return setError("Choose which desk this device is at.");
+      setSaving(true);
+      try {
+        const r = await api<{ station: { code: string } }>("/api/stations", { method: "POST", json: { name: "Concierge desk" } });
+        code = r.station.code;
+      } catch (e) {
+        setSaving(false);
+        return setError((e as Error).message);
+      }
+    }
+    saveDevice({ ...d, code, station: paired ? "Concierge" : d.station });
     router.replace(homeFor(d.mode));
   };
 
@@ -63,13 +79,21 @@ export default function Setup() {
               </select>
             </label>
           )}
-          {paired && (
-            <label>Desk (pairs the staff view with its customer screen)
-              <select value={d.code ?? ""} onChange={(e) => set({ code: e.target.value || null })}>
+          {paired && stations.length > 1 && (
+            <label>Desk
+              <select value={deskCode ?? ""} onChange={(e) => set({ code: e.target.value || null })}>
                 <option value="">Choose…</option>
-                {stations.map((s) => <option key={s.code} value={s.code}>{s.name} · {s.code}</option>)}
+                {stations.map((s) => <option key={s.code} value={s.code}>{s.name}</option>)}
               </select>
             </label>
+          )}
+          {paired && stations.length <= 1 && (
+            <p className="muted" style={{ margin: 0, fontSize: 15 }}>
+              {stations.length === 1 ? `Linked to the ${stations[0].name}. ` : "This creates the concierge desk. "}
+              {d.mode === "concierge"
+                ? "Set up the customer screen the same way and the two link up automatically. It works on its own too."
+                : "Works on its own as a self-scan screen. When the concierge staff view is open, it shows a welcome instead."}
+            </p>
           )}
           <label>Camera
             <select value={d.camera} onChange={(e) => set({ camera: e.target.value as DeviceSettings["camera"] })}>
@@ -78,7 +102,7 @@ export default function Setup() {
             </select>
           </label>
           {error && <p className="error">{error}</p>}
-          <button className="btn btn-primary" onClick={save}>Save and start</button>
+          <button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? "Saving…" : "Save and start"}</button>
           <p className="muted" style={{ fontSize: 14 }}>
             Device {d.id}. Managers: <a href="/manage">staff, desks, events and the scan log</a>.
           </p>
